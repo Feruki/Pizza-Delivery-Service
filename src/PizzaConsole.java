@@ -76,7 +76,7 @@ public class PizzaConsole {
     }
 
     private void register(Scanner sc) {
-        System.out.println("Please enter your user name:");
+        System.out.println("\nPlease enter your user name:");
         String userName = sc.nextLine();
         System.out.println("Please enter your password:");
         String password = sc.nextLine();
@@ -118,9 +118,11 @@ public class PizzaConsole {
             System.out.println("4. View cart");
             System.out.println("5. Place order");
             System.out.println("6. View order history");
-            System.out.println("7. Log out");
+            System.out.println("7. Change Address");
+            System.out.println("8. Log out");
 
             int choice = sc.nextInt();
+            sc.nextLine();
 
             switch (choice) {
                 case 1:
@@ -142,6 +144,9 @@ public class PizzaConsole {
                     api.viewOrderHistory(customer);
                     break;
                 case 7:
+                    api.changeCustomerAddress(sc, customer);
+                    break;
+                case 8:
                     System.out.println("Logging out...");
                     return;
                 default:

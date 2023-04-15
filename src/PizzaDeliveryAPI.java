@@ -17,10 +17,10 @@ public class PizzaDeliveryAPI implements DeliveryService {
 
     @Override
     public User login(String u, String p) {
-        if(u.equals("admin") && p.equals("adminPw")) return admin;
+        if(admin.login(u, p)) return admin;
 
         for(Customer c : customers) {
-            if(c.getUsername().equals(u) && c.getPassword().equals(p)) return c;
+            if(c.login(u, p)) return c;
         }
 
         return null;
@@ -78,40 +78,36 @@ public class PizzaDeliveryAPI implements DeliveryService {
 
     @Override
     public void placeOrder(Customer customer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'placeOrder'");
+        orders.add(customer.placeOrder());
     }
 
     @Override
     public void viewOrderHistory(Customer customer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'viewOrderHistory'");
+        System.out.println();
+        customer.showOrders();
+    }
+
+    @Override
+    public void changeCustomerAddress(Scanner sc, Customer customer) {
+        customer.changeAddress(sc);
     }
 
     @Override
     public void addItemToMenu(Scanner sc) {
-        System.out.println("Enter the name of the new dish you would like to add:");
-        String name = sc.nextLine();
-        System.out.println("How much should the new dish cost?");
-        Double price = sc.nextDouble();
-        sc.nextLine();
-        System.out.println("Is it a Pizza or is it Pasta?");
-        String type = sc.nextLine();
-
-        menu.add(new Product(name, price, type));
+        admin.addProduct(sc, menu);
     }
 
     @Override
     public void removeItemFromMenu(Scanner sc) {
-        System.out.println("\nEnter the number of the dish you would like to remove:");
-        int pick = sc.nextInt();
-        menu.remove(pick-1);
+        admin.removeProduct(sc, menu);
     }
 
     @Override
     public void viewOrders() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'viewOrders'");
+        System.out.println();
+        for(Order o : orders) {
+            System.out.println(o + " made by Customer #" + o.getCustomer().getId() + " - " + o.getCustomer().getFullName());
+        }
     }
     
 }

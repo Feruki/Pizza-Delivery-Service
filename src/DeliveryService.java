@@ -9,6 +9,7 @@ public interface DeliveryService {
     void viewCart(Customer customer);
     void placeOrder(Customer customer);
     void viewOrderHistory(Customer customer);
+    void changeCustomerAddress(Scanner sc, Customer customer);
 
     void addItemToMenu(Scanner sc);
     void removeItemFromMenu(Scanner sc);

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -6,7 +7,7 @@ public class Customer extends User{
     private String name, surname, username, password;
     private Address address;
     private Cart shoppingcart;
-    final int id;
+    private final int id;
     private static int idCounter = 0;
     List <Order> orderHistory;
 
@@ -19,7 +20,9 @@ public class Customer extends User{
         this.address = null; 
         this.id = -1;
     }
+
     Customer(String n, String s, String u, String p, Address a) {
+        orderHistory = new ArrayList<Order>();
         this.name = n;
         this.surname = s;
         this.username = u;
@@ -29,22 +32,6 @@ public class Customer extends User{
         this.id = idCounter;
         idCounter++;
     }
-
-    //customer methods
-    // Boolean register() {
-    //     //register new customer
-    //     try {
-    //         Scanner sc = new Scanner(System.in);
-    //         System.out.println("Enter username: ");
-    //         String userName = sc.nextLine();
-    //         System.out.println("Enter password: ");
-    //         String password = sc.nextLine();
-    //         return true;
-    //     } catch (Exception e) {
-    //         System.out.println("Error: " + e);
-    //     }
-    //     return false;  
-    // }
 
     Boolean addToCart(Product p){
         //add product to cart
@@ -83,11 +70,10 @@ public class Customer extends User{
         }
         return 0;
     }
-    Boolean changeAddress(){
+    Boolean changeAddress(Scanner sc){
         //change adress
         try {
             //ask for new adress
-            Scanner sc = new Scanner(System.in);
             System.out.println("Enter city: ");
             address.city = sc.nextLine();
             System.out.println("Enter street: ");
@@ -96,12 +82,24 @@ public class Customer extends User{
             address.zipcode = sc.nextInt();
             System.out.println("Enter number: ");
             address.number = sc.nextInt();
-            sc.close();
             return true;
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         return false;
+    }
+
+    public Order placeOrder() {
+        Order o = new Order(this);
+        orderHistory.add(o);
+        shoppingcart.clearCart();
+        return o;
+    }
+
+    public void showOrders() {
+        for(Order o : orderHistory) {
+            System.out.println(o);
+        }
     }
 
     //login from super class
@@ -126,6 +124,11 @@ public class Customer extends User{
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public String getFullName() {
+        return surname + ", " + name;
+    }
+    
     public Address getAddress() {
         return address;
     }
@@ -140,5 +143,9 @@ public class Customer extends User{
 
     public int getId() {
         return id;
+    }
+
+    public Cart getCart() {
+        return shoppingcart;
     }
 }

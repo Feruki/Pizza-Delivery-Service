@@ -89,12 +89,17 @@ public class Cart {
     public void clearCart() {
         if (!products.isEmpty()) {
             products.clear();
+            total = 0;
         }
     }
 
     public double getTotal() {
         // return round(total);
         return total;
+    }
+
+    public List<Product> getProducts() {
+        return products;
     }
 
     // Helper Method
