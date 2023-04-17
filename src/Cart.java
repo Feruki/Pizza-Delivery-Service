@@ -69,7 +69,6 @@ public class Cart {
         System.out.println();
     }
 
-    //TODO
     // Bräuchten diese Methode nicht unbedingt, habe sie programmieren,
     // aber darf nicht in Kombi mit den Zeilen in addProduct und removeProduct genutzt werden!
     // public double calcTotal() {
