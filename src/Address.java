@@ -1,7 +1,7 @@
 public class Address {
     //attributes
-    String city, street;
-    int zipcode, number;
+    private String city, street;
+    private int zipcode, number;
 
     //constructor
     Address(String c, String s, int z, int number){

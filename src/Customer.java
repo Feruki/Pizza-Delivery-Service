@@ -9,10 +9,10 @@ public class Customer extends User{
     private Cart shoppingcart;
     private final int id;
     private static int idCounter = 0;
-    List <Order> orderHistory;
+    private List <Order> orderHistory;
 
     //constructor
-    Customer() {
+    public Customer() {
         this.name = null;
         this.surname = null;
         this.username = null;
@@ -21,7 +21,7 @@ public class Customer extends User{
         this.id = -1;
     }
 
-    Customer(String n, String s, String u, String p, Address a) {
+    public Customer(String n, String s, String u, String p, Address a) {
         orderHistory = new ArrayList<Order>();
         this.name = n;
         this.surname = s;
@@ -33,7 +33,7 @@ public class Customer extends User{
         idCounter++;
     }
 
-    Boolean addToCart(Product p){
+    public boolean addToCart(Product p){
         //add product to cart
         try {
             shoppingcart.addProduct(p);
@@ -43,7 +43,7 @@ public class Customer extends User{
         }
         return false;
     }
-    Boolean removeFromCart(Product p){
+    public boolean removeFromCart(Product p){
         //remove product from cart
         try {
             shoppingcart.removeProduct(p);
@@ -53,7 +53,7 @@ public class Customer extends User{
         }
         return false;
     }
-    void showCart() {
+    public void showCart() {
         //show cart
         try {
             shoppingcart.showProducts();
@@ -61,7 +61,7 @@ public class Customer extends User{
             System.out.println("Error: " + e);
         }
     }
-    double showTotal() {
+    public double showTotal() {
         //show total value of the shoppingcart
         try {
             return shoppingcart.getTotal();
@@ -70,18 +70,18 @@ public class Customer extends User{
         }
         return 0;
     }
-    Boolean changeAddress(Scanner sc){
+    public boolean changeAddress(Scanner sc){
         //change adress
         try {
             //ask for new adress
             System.out.println("Enter city: ");
-            address.city = sc.nextLine();
+            address.setCity(sc.nextLine());
             System.out.println("Enter street: ");
-            address.street = sc.nextLine();
+            address.setStreet(sc.nextLine());
             System.out.println("Enter zipcode: ");
-            address.zipcode = sc.nextInt();
+            address.setZipcode(sc.nextInt());
             System.out.println("Enter number: ");
-            address.number = sc.nextInt();
+            address.setNumber(sc.nextInt());
             return true;
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -104,7 +104,7 @@ public class Customer extends User{
 
     //login from super class
     @Override
-    Boolean login(String u, String p) {
+    public boolean login(String u, String p) {
         if(u.equals(username) && p.equals(password)){
             return true;
         }

@@ -6,7 +6,7 @@ public class PizzaDeliveryAPI implements DeliveryService {
     private List<Customer> customers;
     private List<Order> orders;
     private List<Product> menu;
-    Admin admin;
+    private Admin admin;
 
     public PizzaDeliveryAPI(Admin a, ArrayList<Product> menu) {
         this.admin = a;

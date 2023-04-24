@@ -52,11 +52,6 @@ public class PizzaConsole {
             return;
         }
         
-        // if (userName == null) {
-        //     System.out.println("Invalid email or password.");
-        //     return;
-        // }
-        
         if (user instanceof Customer) {
             Customer customer = (Customer) user;
             System.out.println("\nWelcome " + customer.getName() + "!");
@@ -65,14 +60,6 @@ public class PizzaConsole {
             System.out.println("\nWelcome Admin!");
             showAdminMenu(sc);
         }
-
-        // if (userName.equals("Customer")) {
-        //     System.out.println("\nWelcome Customer!");
-        //     showCustomerMenu(sc);
-        // } else if (userName.equals("Admin")) {
-        //     System.out.println("\nWelcome Admin!");
-        //     showAdminMenu(sc);
-        // }
     }
 
     private void register(Scanner sc) {
@@ -109,7 +96,6 @@ public class PizzaConsole {
     }
 
     private void showCustomerMenu(Scanner sc, Customer customer) {
-    // private void showCustomerMenu(Scanner sc) {
         while (true) {
             System.out.println("\nWhat would you like to do?");
             System.out.println("1. View menu");

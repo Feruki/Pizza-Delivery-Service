@@ -13,16 +13,13 @@ public class Admin extends User{
 
     //login with admin credentials
     @Override
-    Boolean login(String u, String p) {
+    public boolean login(String u, String p) {
         if(u.equals(username) && p.equals(password)){
             return true;
         }
         return false;
     }
-
-
-    //admin methods
-
+    
     //add new product
     void addProduct(Scanner sc, List<Product> menu) {
         System.out.println("Enter the name of the new dish you would like to add:");
