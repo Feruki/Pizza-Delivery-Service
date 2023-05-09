@@ -13,7 +13,7 @@ public class Admin extends User{
 
     //login with admin credentials
     @Override
-    Boolean login(String u, String p) {
+    public boolean login(String u, String p) {
         if(u.equals(username) && p.equals(password)){
             return true;
         }
@@ -24,7 +24,7 @@ public class Admin extends User{
     //admin methods
 
     //add new product
-    void addProduct(Scanner sc, List<Product> menu) {
+    public boolean addProduct(Scanner sc, List<Product> menu) {
         System.out.println("Enter the name of the new dish you would like to add:");
         String name = sc.nextLine();
         System.out.println("How much should the new dish cost?");
@@ -34,12 +34,13 @@ public class Admin extends User{
         String type = sc.nextLine();
 
         menu.add(new Product(name, price, type));
+        return true;
     }
     //remove product
-    void removeProduct(Scanner sc, List<Product> menu){
+    public boolean removeProduct(Scanner sc, List<Product> menu) {
         System.out.println("\nEnter the number of the dish you would like to remove:");
         int pick = sc.nextInt();
         menu.remove(pick-1);
+        return true;
     }
-    
 }

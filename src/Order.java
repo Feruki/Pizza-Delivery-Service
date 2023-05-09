@@ -1,13 +1,14 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
     //attributes
-    final int id;
+    private final int id;
     private static int idCounter = 1;
     private Customer c;
-    List<Product> p;
-    double totalCost;
+    private List<Product> p;
+    private double totalCost;
 
     //constructor
     Order(Customer customer) {
@@ -28,5 +29,9 @@ public class Order {
 
     public Customer getCustomer() {
         return c;
+    }
+
+    public double getCost() {
+        return totalCost;
     }
 }

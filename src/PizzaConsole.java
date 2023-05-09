@@ -31,6 +31,7 @@ public class PizzaConsole {
                 case 3:
                     System.out.println("Goodbye!");
                     sc.close();
+                    api.save();
                     return;
                 default:
                     System.out.println("Invalid choice.");
@@ -52,11 +53,6 @@ public class PizzaConsole {
             return;
         }
         
-        // if (userName == null) {
-        //     System.out.println("Invalid email or password.");
-        //     return;
-        // }
-        
         if (user instanceof Customer) {
             Customer customer = (Customer) user;
             System.out.println("\nWelcome " + customer.getName() + "!");
@@ -65,42 +61,12 @@ public class PizzaConsole {
             System.out.println("\nWelcome Admin!");
             showAdminMenu(sc);
         }
-
-        // if (userName.equals("Customer")) {
-        //     System.out.println("\nWelcome Customer!");
-        //     showCustomerMenu(sc);
-        // } else if (userName.equals("Admin")) {
-        //     System.out.println("\nWelcome Admin!");
-        //     showAdminMenu(sc);
-        // }
     }
 
     private void register(Scanner sc) {
-        System.out.println("\nPlease enter your user name:");
-        String userName = sc.nextLine();
-        System.out.println("Please enter your password:");
-        String password = sc.nextLine();
-        
-        System.out.println("\nPlease enter your name:");
-        String name = sc.nextLine();
-        System.out.println("Please enter your surname:");
-        String surname = sc.nextLine();
-
-
-        System.out.println("\nPlease enter your address:");
-        System.out.println("City:");
-        String city = sc.nextLine();
-        System.out.println("Zipcode:");
-        int zipcode = sc.nextInt();
-        System.out.println("Street:");
-        String street = sc.nextLine();
-        System.out.println("Streetnumber:");
-        int number = sc.nextInt();
-        
-        Customer customer = api.registerCustomer(name, surname, userName, password, city, zipcode, street, number);
+        Customer customer = api.registerCustomer(sc);
 
         if(customer != null) {
-        // if (userName != null) {
             System.out.println("Registration successful!");
             System.out.println("Your customer ID is: " + customer.getId());
         } else {
@@ -162,7 +128,8 @@ public class PizzaConsole {
             System.out.println("2. Add item to menu");
             System.out.println("3. Remove item from menu");
             System.out.println("4. View orders");
-            System.out.println("5. Log out");
+            System.out.println("5. View customers");
+            System.out.println("6. Log out");
     
             int choice = sc.nextInt();
             sc.nextLine();
@@ -181,6 +148,9 @@ public class PizzaConsole {
                     api.viewOrders();
                     break;
                 case 5:
+                    api.viewCustomers();
+                    break;
+                case 6:
                     System.out.println("Logging out...");
                     return;
                 default:

@@ -1,18 +1,23 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PizzaDeliveryAPI implements DeliveryService {
+public class PizzaDeliveryAPI implements DeliveryService, Serializable {
     private List<Customer> customers;
     private List<Order> orders;
     private List<Product> menu;
-    Admin admin;
+    private Admin admin;
 
-    public PizzaDeliveryAPI(Admin a, ArrayList<Product> menu) {
+    public PizzaDeliveryAPI(Admin a) {
         this.admin = a;
         customers = new ArrayList<Customer>();
         orders = new ArrayList<Order>();
-        this.menu = menu;
+        load();
     }
 
     @Override
@@ -27,8 +32,31 @@ public class PizzaDeliveryAPI implements DeliveryService {
     }
 
     @Override
-    public Customer registerCustomer(String name, String surname, String userName, String password, String city, int zipcode, String street, int number) {
-        Customer c = new Customer(name, surname, userName, password, new Address(city, street, zipcode, number));
+    public Customer registerCustomer(Scanner sc) {
+        System.out.println("\nPlease enter your user name:");
+        String username = sc.nextLine();
+        System.out.println("Please enter your password:");
+        String password = sc.nextLine();
+        
+        System.out.println("\nPlease enter your name:");
+        String name = sc.nextLine();
+        System.out.println("Please enter your surname:");
+        String surname = sc.nextLine();
+
+
+        System.out.println("\nPlease enter your address:");
+        System.out.println("City:");
+        String city = sc.nextLine();
+        System.out.println("Zipcode:");
+        int zipcode = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Street:");
+        String street = sc.nextLine();
+        System.out.println("Streetnumber:");
+        int number = sc.nextInt();
+        sc.nextLine();
+
+        Customer c = new Customer(name, surname, username, password, new Address(city, street, zipcode, number));
         customers.add(c);
 
         return c;
@@ -109,5 +137,57 @@ public class PizzaDeliveryAPI implements DeliveryService {
             System.out.println(o + " made by Customer #" + o.getCustomer().getId() + " - " + o.getCustomer().getFullName());
         }
     }
-    
+
+    @Override
+    public void viewCustomers() {
+        System.out.println();
+        for(Customer c : customers) {
+            System.out.println(c);
+        } 
+    }
+
+    @Override
+    public void save() {
+        // Saving customers
+        try (FileOutputStream fileOut = new FileOutputStream("./ser/customer.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
+            objectOut.writeObject(customers);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Saving orders
+        try (FileOutputStream fileOut = new FileOutputStream("./ser/orders.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
+            objectOut.writeObject(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Saving the menu
+        try (FileOutputStream fileOut = new FileOutputStream("./ser/menu.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
+            objectOut.writeObject(menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void load() {
+        // Loading customers
+        try (FileInputStream fileIn = new FileInputStream("./ser/customer.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
+            customers = (ArrayList<Customer>) objectIn.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Loading orders
+        try (FileInputStream fileIn = new FileInputStream("./ser/orders.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
+            orders = (ArrayList<Order>) objectIn.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Loading the menu
+        try (FileInputStream fileIn = new FileInputStream("./ser/menu.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
+            menu = (ArrayList<Product>) objectIn.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

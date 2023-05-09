@@ -3,5 +3,5 @@ public abstract class User {
     private String username, password;
 
     //head of login method
-    abstract Boolean login(String u, String p);
+    abstract boolean login(String u, String p);
 }

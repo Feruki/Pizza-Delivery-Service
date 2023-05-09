@@ -1,7 +1,9 @@
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     //attributes
-    String city, street;
-    int zipcode, number;
+    private String city, street;
+    private int zipcode, number;
 
     //constructor
     Address(String c, String s, int z, int number){
