@@ -30,8 +30,8 @@ public class PizzaConsole {
                     break;
                 case 3:
                     System.out.println("Goodbye!");
-                    sc.close();
                     api.save();
+                    sc.close();
                     return;
                 default:
                     System.out.println("Invalid choice.");

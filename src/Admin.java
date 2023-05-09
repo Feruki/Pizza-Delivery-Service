@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.Scanner;
 
-public class Admin extends User{
+public class Admin extends User {
     //attributes
     private String username, password;
     

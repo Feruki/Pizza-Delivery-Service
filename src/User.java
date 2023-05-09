@@ -1,3 +1,4 @@
+@SuppressWarnings("unused")
 public abstract class User {
     //attributes
     private String username, password;

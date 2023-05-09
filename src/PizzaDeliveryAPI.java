@@ -137,7 +137,6 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
             System.out.println(o + " made by Customer #" + o.getCustomer().getId() + " - " + o.getCustomer().getFullName());
         }
     }
-<<<<<<< HEAD
 
     @Override
     public void viewCustomers() {
@@ -192,6 +191,3 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         }
     }
 }
-=======
-}
->>>>>>> 2ff700281becb7372e48c7739887dec7cf2089de
