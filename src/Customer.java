@@ -13,7 +13,7 @@ public class Customer extends User implements Serializable {
     private List <Order> orderHistory;
 
     //constructor
-    Customer() {
+    public Customer() {
         this.name = null;
         this.surname = null;
         this.username = null;
@@ -22,7 +22,7 @@ public class Customer extends User implements Serializable {
         this.id = -1;
     }
 
-    Customer(String n, String s, String u, String p, Address a) {
+    public Customer(String n, String s, String u, String p, Address a) {
         orderHistory = new ArrayList<Order>();
         this.name = n;
         this.surname = s;
@@ -132,14 +132,6 @@ public class Customer extends User implements Serializable {
     
     public Address getAddress() {
         return address;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public int getId() {

@@ -11,7 +11,7 @@ public class Order implements Serializable {
     private double totalCost;
 
     //constructor
-    Order(Customer customer) {
+    public Order(Customer customer) {
         p = new ArrayList<Product>();
         this.id = idCounter;
         idCounter++;
@@ -31,7 +31,11 @@ public class Order implements Serializable {
         return c;
     }
 
+<<<<<<< HEAD
     public double getCost() {
+=======
+    public double getTotalCost() {
+>>>>>>> 2ff700281becb7372e48c7739887dec7cf2089de
         return totalCost;
     }
 }

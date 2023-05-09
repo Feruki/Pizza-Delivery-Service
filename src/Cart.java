@@ -2,8 +2,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 public class Cart implements Serializable {
     private List<Product> products;
+=======
+public class Cart {
+    private final List<Product> products;
+>>>>>>> 2ff700281becb7372e48c7739887dec7cf2089de
     private double total;
 
     public Cart() {
@@ -42,7 +47,6 @@ public class Cart implements Serializable {
     }
 
     public double getTotal() {
-        // return round(total);
         return total;
     }
 

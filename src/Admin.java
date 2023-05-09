@@ -19,10 +19,7 @@ public class Admin extends User{
         }
         return false;
     }
-
-
-    //admin methods
-
+    
     //add new product
     public boolean addProduct(Scanner sc, List<Product> menu) {
         System.out.println("Enter the name of the new dish you would like to add:");

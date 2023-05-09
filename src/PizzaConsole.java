@@ -75,7 +75,6 @@ public class PizzaConsole {
     }
 
     private void showCustomerMenu(Scanner sc, Customer customer) {
-    // private void showCustomerMenu(Scanner sc) {
         while (true) {
             System.out.println("\nWhat would you like to do?");
             System.out.println("1. View menu");
