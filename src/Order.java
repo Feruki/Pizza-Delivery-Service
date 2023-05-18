@@ -3,14 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements Serializable {
-    //attributes
+    // Attributes
     private final int id;
     private static int idCounter = 1;
     private Customer c;
     private List<Product> p;
     private double totalCost;
 
-    //constructor
+    // Constructor
     public Order(Customer customer) {
         p = new ArrayList<Product>();
         this.id = idCounter;
@@ -22,16 +22,18 @@ public class Order implements Serializable {
         this.totalCost = customer.showTotal();
     }
 
-    @Override
-    public String toString() {
-        return "Order #" + id + " - " + p;
-    }
-
+    // Getters
     public Customer getCustomer() {
         return c;
     }
 
     public double getTotalCost() {
         return totalCost;
+    }
+
+    // For easier printing of the order list
+    @Override
+    public String toString() {
+        return "Order #" + id + " - " + p;
     }
 }

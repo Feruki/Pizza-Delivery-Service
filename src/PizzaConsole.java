@@ -1,12 +1,16 @@
 import java.util.Scanner;
 
 public class PizzaConsole {
+    // Attributes
     private DeliveryService api;
+    private int choice;
 
+    // Constructor
     public PizzaConsole(DeliveryService api) {
         this.api = api;
     }
 
+    // Starting screen
     public void run() {
         Scanner sc = new Scanner(System.in);
 
@@ -18,7 +22,14 @@ public class PizzaConsole {
             System.out.println("2. Register");
             System.out.println("3. Exit");
 
-            int choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Wrong input! Please try again.\n");
+                run();
+            }
+            
+            // To eat up the entered line break
             sc.nextLine();
 
             switch (choice) {
@@ -39,6 +50,7 @@ public class PizzaConsole {
         }
     }
 
+    // Login screen
     private void login(Scanner sc) {
         System.out.println("\nPlease enter your user name:");
         String username = sc.nextLine();
@@ -46,13 +58,16 @@ public class PizzaConsole {
         System.out.println("Please enter your password:");
         String password = sc.nextLine();
 
+        // Using the login method from the API which differentiates between admin and customer and returns a user object
         User user = api.login(username, password);
 
+        // If the username and password combination is wrong, api.login returns null
         if (user == null) {
             System.out.println("Invalid username or password.");
             return;
         }
         
+        // Checking if it's a customer or an admin to print the respective menu
         if (user instanceof Customer) {
             Customer customer = (Customer) user;
             System.out.println("\nWelcome " + customer.getName() + "!");
@@ -63,6 +78,7 @@ public class PizzaConsole {
         }
     }
 
+    // Register screen
     private void register(Scanner sc) {
         Customer customer = api.registerCustomer(sc);
 
@@ -74,6 +90,7 @@ public class PizzaConsole {
         }
     }
 
+    // Customer menu
     private void showCustomerMenu(Scanner sc, Customer customer) {
         while (true) {
             System.out.println("\nWhat would you like to do?");
@@ -86,7 +103,14 @@ public class PizzaConsole {
             System.out.println("7. Change Address");
             System.out.println("8. Log out");
 
-            int choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Wrong input! Please try again.\n");
+                showCustomerMenu(sc, customer);
+            }
+
+            // To eat up the entered line break
             sc.nextLine();
 
             switch (choice) {
@@ -130,7 +154,14 @@ public class PizzaConsole {
             System.out.println("5. View customers");
             System.out.println("6. Log out");
     
-            int choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Wrong input! Please try again.\n");
+                showAdminMenu(sc);
+            }
+
+            // To eat up the entered line break
             sc.nextLine();
     
             switch (choice) {

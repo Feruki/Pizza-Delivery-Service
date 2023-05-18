@@ -4,24 +4,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Customer extends User implements Serializable {
-    //attributes
+    // Attributes
     private String name, surname, username, password;
     private Address address;
     private Cart shoppingcart;
     private final int id;
-    private static int idCounter = 0;
+    private static int idCounter = 0; // As we can not serialize static attributes, this will reset upon loading and is a flaw of Serializable
     private List <Order> orderHistory;
 
-    //constructor
-    public Customer() {
-        this.name = null;
-        this.surname = null;
-        this.username = null;
-        this.password = null;
-        this.address = null; 
-        this.id = -1;
-    }
-
+    // Constructor
     public Customer(String n, String s, String u, String p, Address a) {
         orderHistory = new ArrayList<Order>();
         this.name = n;
@@ -33,9 +24,9 @@ public class Customer extends User implements Serializable {
         this.id = idCounter;
         idCounter++;
     }
-
+    
+    // Adding a product to the Cart
     public boolean addToCart(Product p){
-        //add product to cart
         try {
             shoppingcart.addProduct(p);
             return true;
@@ -44,8 +35,9 @@ public class Customer extends User implements Serializable {
         }
         return false;
     }
+
+    // Removing a product from the Cart
     public boolean removeFromCart(Product p){
-        //remove product from cart
         try {
             shoppingcart.removeProduct(p);
             return true;
@@ -54,16 +46,18 @@ public class Customer extends User implements Serializable {
         }
         return false;
     }
+
+    // Showing all products in the Cart
     public void showCart() {
-        //show cart
         try {
             shoppingcart.showProducts();
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
     }
+
+    // Showing the total cost of the Cart
     public double showTotal() {
-        //show total value of the shoppingcart
         try {
             return shoppingcart.getTotal();
         } catch (Exception e) {
@@ -71,10 +65,10 @@ public class Customer extends User implements Serializable {
         }
         return 0;
     }
+
+    // Changign the Address of the Customer
     public boolean changeAddress(Scanner sc){
-        //change adress
         try {
-            //ask for new adress
             System.out.println("Enter city: ");
             address.setCity(sc.nextLine());
             System.out.println("Enter street: ");
@@ -90,20 +84,22 @@ public class Customer extends User implements Serializable {
         return false;
     }
 
+    // Placing the order
     public Order placeOrder() {
-        Order o = new Order(this);
+        Order o = new Order(this); 
         orderHistory.add(o);
-        shoppingcart.clearCart();
-        return o;
+        shoppingcart.clearCart(); // After the order was placed, the Cart needs to be cleared again
+        return o; // Returning the order to add it to the list of total Orders
     }
 
+    // Showing the order history of a specific customer
     public void showOrders() {
         for(Order o : orderHistory) {
             System.out.println(o);
         }
     }
 
-    //login from super class
+    // Login from with customer credentials
     @Override
     public boolean login(String u, String p) {
         if(u.equals(username) && p.equals(password)){
@@ -112,7 +108,7 @@ public class Customer extends User implements Serializable {
         return true;
     }
    
-    //getter and setter
+    // Getter and Setter
     public String getName() {
         return name;
     }
@@ -142,6 +138,7 @@ public class Customer extends User implements Serializable {
         return shoppingcart;
     }
 
+    // For easier printing of the customer list
     @Override
     public String toString() {
         return "Customer #" + id + " - " + surname + ", " + name;

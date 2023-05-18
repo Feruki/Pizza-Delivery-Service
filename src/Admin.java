@@ -2,16 +2,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Admin extends User {
-    //attributes
+    // Attributes
     private String username, password;
     
-    //constructor
+    // Constructor
     Admin() {
         username = "admin";
         password = "adminPw";
     }
 
-    //login with admin credentials
+    // Login with admin credentials (Hard coded as of now)
     @Override
     public boolean login(String u, String p) {
         if(u.equals(username) && p.equals(password)){
@@ -20,7 +20,7 @@ public class Admin extends User {
         return false;
     }
     
-    //add new product
+    // Adding a new product to the menu
     public boolean addProduct(Scanner sc, List<Product> menu) {
         System.out.println("Enter the name of the new dish you would like to add:");
         String name = sc.nextLine();
@@ -33,7 +33,7 @@ public class Admin extends User {
         menu.add(new Product(name, price, type));
         return true;
     }
-    //remove product
+    // Removing a product from the menu
     public boolean removeProduct(Scanner sc, List<Product> menu) {
         System.out.println("\nEnter the number of the dish you would like to remove:");
         int pick = sc.nextInt();

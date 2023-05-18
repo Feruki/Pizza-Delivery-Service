@@ -1,11 +1,11 @@
 import java.io.Serializable;
 
 public class Address implements Serializable {
-    //attributes
+    // Attributes
     private String city, street;
     private int zipcode, number;
 
-    //constructor
+    // Constructor
     Address(String c, String s, int z, int number){
         this.city = c;
         this.street = s;
@@ -13,7 +13,7 @@ public class Address implements Serializable {
         this.number = number;
     }
 
-    //getter and setter
+    // Getter and Setter
     public String getCity() {
         return city;
     }

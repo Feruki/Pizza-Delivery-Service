@@ -3,30 +3,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart implements Serializable {
+    // Attributes
     private final List<Product> products;
     private double total;
 
+    // Constructor
     public Cart() {
         products = new ArrayList<>();
         total = 0.0;
     }
 
+    // Adding a product to the Cart 
     public boolean addProduct(Product p) {
         if (p != null) {
-            products.add(p); // Produkt wird dem Warenkorb hinzugefügt
-            total += p.getPrice(); // Der Preis des Produktes wird zum Total addiert
+            products.add(p);
+            total += p.getPrice(); // Updating the total price
             return true;
         } else return false;
     }
 
+    // Removing a product from the Cart
     public boolean removeProduct(Product p) {
         if (p != null && products.contains(p)) {
-            products.remove(p); // Produkt wird aus dem Warenkorb entfernt
-            total -= p.getPrice(); // Preis des Produktes wird vom Total subtrahiert
+            products.remove(p); 
+            total -= p.getPrice(); // Updating the total price again, subtracting the price of the removed product
             return true;
         } else return false;
     }
 
+    // Listing all products in the Cart
     public void showProducts() {
         for(Product p : products) {
             System.out.println(p);
@@ -34,13 +39,15 @@ public class Cart implements Serializable {
         System.out.println();
     }
 
+    // Clearing the cart (After an Order was placed for example)
     public void clearCart() {
         if (!products.isEmpty()) {
             products.clear();
-            total = 0;
+            total = 0; // Resetting the total price to 0
         }
     }
 
+    // Getters
     public double getTotal() {
         return total;
     }

@@ -48,16 +48,29 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         System.out.println("City:");
         String city = sc.nextLine();
         System.out.println("Zipcode:");
-        int zipcode = sc.nextInt();
+        int zipcode = 0;
+        try {
+            zipcode = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            registerCustomer(sc);
+        }
         sc.nextLine();
         System.out.println("Street:");
         String street = sc.nextLine();
         System.out.println("Streetnumber:");
-        int number = sc.nextInt();
+        int number = 0;
+        try {
+            number = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            registerCustomer(sc);
+        }
+        // To eat up the entered line break
         sc.nextLine();
 
         Customer c = new Customer(name, surname, username, password, new Address(city, street, zipcode, number));
-        customers.add(c);
+        customers.add(c); // Adding the customer to the total customer list
 
         return c;
     }
@@ -65,12 +78,12 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
     @Override
     public void viewMenu() {
         int n = 1;
-        // Berechnet die Anzahl der Stellen, die die längste Produktzahl benötigt (bei z.B. 50 Produkten wäre longestNumber = 2)
+        // Calculating the length of the longest product number (For example with 50 products longestNumber would be 2)
         int longestNumber = (int) Math.log10(menu.size()) + 1;
         System.out.println("----------------Pizza----------------\n");
         for(Product p : menu) {
             if(p.getType().toLowerCase().equals("pizza"))
-                // %s = String; %[Zahl]s = Breite des Strings; %-[Zahl]s = linkszentriert & einheitlicher Abstand von Produktname und Preis
+                // %s = String; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
                 System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
         }
         System.out.println("\n");
@@ -78,6 +91,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         System.out.println("----------------Pasta----------------\n");
         for(Product p : menu) {
             if(p.getType().toLowerCase().equals("pasta"))
+                // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
                 System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
         }
         System.out.println("\n");
@@ -85,16 +99,28 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
 
     @Override
     public void addItemToCart(Scanner sc, Customer customer) {
+        int pick = 0;
         System.out.println("\nEnter the number of the dish you would like to add:");
-        int pick = sc.nextInt();
-        customer.addToCart(menu.get(pick-1));
+        try {
+            pick = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            registerCustomer(sc);
+        }
+        customer.addToCart(menu.get(pick-1)); // Because of indeces we have to subtract 1, if the customer wants the 10th item it'll be the index 9
     }
 
     @Override
     public void removeItemFromCart(Scanner sc, Customer customer) {
+        int pick = 0;
         System.out.println("\nEnter the number of the dish you would like to remove:");
-        int pick = sc.nextInt();
-        customer.removeFromCart(menu.get(pick-1));
+        try {
+            pick = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            registerCustomer(sc);
+        }
+        customer.removeFromCart(menu.get(pick-1)); // Because of indeces we have to subtract 1, if the customer wants the 10th item it'll be the index 9
     }
 
     @Override
@@ -169,7 +195,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // Just makes it so the IDE doesn't show the warnings anymore
     public void load() {
         // Loading customers
         try (FileInputStream fileIn = new FileInputStream("./ser/customer.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {

@@ -1,16 +1,19 @@
 import java.io.Serializable;
 
 public class Product implements Serializable {
+    // Attributes
     private String name;
     private double price;
     private String type;
 
+    // Constructor
     public Product(String name, double price, String type) {
         this.name = name;
         this.price = price;
         this.type = type;
     }
 
+    // Getters and Setters
     public void setName(String name) {
         this.name = name;
     }
@@ -35,6 +38,7 @@ public class Product implements Serializable {
         return type;
     }
 
+    // For easier printing of the menu
     @Override
     public String toString() {
         return name + ": " + price + "$";
