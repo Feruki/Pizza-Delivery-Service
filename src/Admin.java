@@ -8,7 +8,7 @@ public class Admin extends User {
     // Constructor
     Admin() {
         username = "admin";
-        password = "adminPw";
+        password = "admin";
     }
 
     // Login with admin credentials (Hard coded as of now)
@@ -21,7 +21,7 @@ public class Admin extends User {
     }
     
     // Adding a new product to the menu
-    public boolean addProduct(Scanner sc, List<Product> menu) {
+    public boolean addProduct(Scanner sc, List<ProductDTO> menu) {
         System.out.println("Enter the name of the new dish you would like to add:");
         String name = sc.nextLine();
         System.out.println("How much should the new dish cost?");
@@ -30,11 +30,11 @@ public class Admin extends User {
         System.out.println("Is it a Pizza or is it Pasta?");
         String type = sc.nextLine();
 
-        menu.add(new Product(name, price, type));
+        menu.add(new ProductDTO(name, price, type));
         return true;
     }
     // Removing a product from the menu
-    public boolean removeProduct(Scanner sc, List<Product> menu) {
+    public boolean removeProduct(Scanner sc, List<ProductDTO> menu) {
         System.out.println("\nEnter the number of the dish you would like to remove:");
         int pick = sc.nextInt();
         menu.remove(pick-1);

@@ -7,16 +7,16 @@ public class Order implements Serializable {
     private final int id;
     private static int idCounter = 1;
     private Customer c;
-    private List<Product> p;
+    private List<ProductDTO> p;
     private double totalCost;
 
     // Constructor
     public Order(Customer customer) {
-        p = new ArrayList<Product>();
+        p = new ArrayList<ProductDTO>();
         this.id = idCounter;
         idCounter++;
         this.c = customer;
-        for(Product oProduct : customer.getCart().getProducts()) {
+        for(ProductDTO oProduct : customer.getCart().getProducts()) {
             p.add(oProduct);
         }       
         this.totalCost = customer.showTotal();

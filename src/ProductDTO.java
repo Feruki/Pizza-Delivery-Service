@@ -1,13 +1,11 @@
-import java.io.Serializable;
-
-public class Product implements Serializable {
+public class ProductDTO {
     // Attributes
     private String name;
     private double price;
     private String type;
 
     // Constructor
-    public Product(String name, double price, String type) {
+    public ProductDTO(String name, double price, String type) {
         this.name = name;
         this.price = price;
         this.type = type;

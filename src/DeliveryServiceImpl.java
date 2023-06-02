@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PizzaDeliveryAPI implements DeliveryService, Serializable {
+public class DeliveryServiceImpl implements DeliveryService, Serializable {
     private List<Customer> customers;
     private List<Order> orders;
-    private List<Product> menu;
+    private List<ProductDTO> menu;
     private Admin admin;
 
-    public PizzaDeliveryAPI(Admin a) {
+    public DeliveryServiceImpl(Admin a) {
         this.admin = a;
         customers = new ArrayList<Customer>();
         orders = new ArrayList<Order>();
@@ -69,7 +69,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         // To eat up the entered line break
         sc.nextLine();
 
-        Customer c = new Customer(name, surname, username, password, new Address(city, street, zipcode, number));
+        Customer c = new Customer(name, surname, username, password, new AddressDTO(city, street, zipcode, number));
         customers.add(c); // Adding the customer to the total customer list
 
         return c;
@@ -81,7 +81,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         // Calculating the length of the longest product number (For example with 50 products longestNumber would be 2)
         int longestNumber = (int) Math.log10(menu.size()) + 1;
         System.out.println("----------------Pizza----------------\n");
-        for(Product p : menu) {
+        for(ProductDTO p : menu) {
             if(p.getType().toLowerCase().equals("pizza"))
                 // %s = String; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
                 System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
@@ -89,7 +89,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         System.out.println("\n");
 
         System.out.println("----------------Pasta----------------\n");
-        for(Product p : menu) {
+        for(ProductDTO p : menu) {
             if(p.getType().toLowerCase().equals("pasta"))
                 // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
                 System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
@@ -211,7 +211,7 @@ public class PizzaDeliveryAPI implements DeliveryService, Serializable {
         }
         // Loading the menu
         try (FileInputStream fileIn = new FileInputStream("./ser/menu.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-            menu = (ArrayList<Product>) objectIn.readObject();
+            menu = (ArrayList<ProductDTO>) objectIn.readObject();
         } catch (Exception e) {
             e.printStackTrace();
         }

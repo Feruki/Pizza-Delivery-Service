@@ -1,12 +1,10 @@
-import java.io.Serializable;
-
-public class Address implements Serializable {
+public class AddressDTO {
     // Attributes
     private String city, street;
     private int zipcode, number;
 
     // Constructor
-    Address(String c, String s, int z, int number){
+    AddressDTO(String c, String s, int z, int number) {
         this.city = c;
         this.street = s;
         this.zipcode = z;

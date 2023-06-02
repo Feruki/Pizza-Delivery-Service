@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Customer extends User implements Serializable {
+public class CustomerDTO extends User implements Serializable {
     // Attributes
     private String name, surname, username, password;
     private AddressDTO address;
@@ -13,7 +13,7 @@ public class Customer extends User implements Serializable {
     private List <Order> orderHistory;
 
     // Constructor
-    public Customer(String n, String s, String u, String p, AddressDTO a) {
+    public CustomerDTO(String n, String s, String u, String p, AddressDTO a) {
         orderHistory = new ArrayList<Order>();
         this.name = n;
         this.surname = s;
@@ -85,12 +85,12 @@ public class Customer extends User implements Serializable {
     }
 
     // Placing the order
-    public Order placeOrder() {
-        Order o = new Order(this); 
-        orderHistory.add(o);
-        shoppingcart.clearCart(); // After the order was placed, the Cart needs to be cleared again
-        return o; // Returning the order to add it to the list of total Orders
-    }
+    // public Order placeOrder() {
+    //     Order o = new Order(this); 
+    //     orderHistory.add(o);
+    //     shoppingcart.clearCart(); // After the order was placed, the Cart needs to be cleared again
+    //     return o; // Returning the order to add it to the list of total Orders
+    // }
 
     // Showing the order history of a specific customer
     public void showOrders() {

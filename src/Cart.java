@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Cart implements Serializable {
     // Attributes
-    private final List<Product> products;
+    private final List<ProductDTO> products;
     private double total;
 
     // Constructor
@@ -14,7 +14,7 @@ public class Cart implements Serializable {
     }
 
     // Adding a product to the Cart 
-    public boolean addProduct(Product p) {
+    public boolean addProduct(ProductDTO p) {
         if (p != null) {
             products.add(p);
             total += p.getPrice(); // Updating the total price
@@ -23,7 +23,7 @@ public class Cart implements Serializable {
     }
 
     // Removing a product from the Cart
-    public boolean removeProduct(Product p) {
+    public boolean removeProduct(ProductDTO p) {
         if (p != null && products.contains(p)) {
             products.remove(p); 
             total -= p.getPrice(); // Updating the total price again, subtracting the price of the removed product
@@ -33,7 +33,7 @@ public class Cart implements Serializable {
 
     // Listing all products in the Cart
     public void showProducts() {
-        for(Product p : products) {
+        for(ProductDTO p : products) {
             System.out.println(p);
         }
         System.out.println();
@@ -52,7 +52,7 @@ public class Cart implements Serializable {
         return total;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
     }
 }
