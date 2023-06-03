@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CustomerDTO extends User implements Serializable {
+public class CustomerDTO extends UserDTO implements Serializable {
     // Attributes
     private String name, surname, username, password;
     private AddressDTO address;

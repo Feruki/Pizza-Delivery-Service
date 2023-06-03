@@ -10,15 +10,13 @@ public class Haupt {
             Connection con = DriverManager.getConnection(getProperty("db.url"), getProperty("db.username"), getProperty("db.password"));
 
             AddressDAOImpl aDAO = new AddressDAOImpl(con);
-            ProductDAOImpl pDAO = new ProductDAOImpl(con);
             //! TEMP
             aDAO.getClass();
-            pDAO.getClass();
         } catch (Exception e) {
             e.printStackTrace();
         }
         
-        Admin a = new Admin();
+        AdminDTO a = new AdminDTO();
         DeliveryService service = new DeliveryServiceImpl(a);
         PizzaConsole pc = new PizzaConsole(service);
         pc.run();

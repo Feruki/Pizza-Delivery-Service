@@ -11,9 +11,9 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
     private List<Customer> customers;
     private List<Order> orders;
     private List<ProductDTO> menu;
-    private Admin admin;
+    private AdminDTO admin;
 
-    public DeliveryServiceImpl(Admin a) {
+    public DeliveryServiceImpl(AdminDTO a) {
         this.admin = a;
         customers = new ArrayList<Customer>();
         orders = new ArrayList<Order>();
@@ -21,7 +21,7 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
     }
 
     @Override
-    public User login(String u, String p) {
+    public UserDTO login(String u, String p) {
         if(admin.login(u, p)) return admin;
 
         for(Customer c : customers) {

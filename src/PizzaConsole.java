@@ -59,7 +59,7 @@ public class PizzaConsole {
         String password = sc.nextLine();
 
         // Using the login method from the API which differentiates between admin and customer and returns a user object
-        User user = api.login(username, password);
+        UserDTO user = api.login(username, password);
 
         // If the username and password combination is wrong, api.login returns null
         if (user == null) {
@@ -72,7 +72,7 @@ public class PizzaConsole {
             Customer customer = (Customer) user;
             System.out.println("\nWelcome " + customer.getName() + "!");
             showCustomerMenu(sc, customer);
-        } else if (user instanceof Admin) {
+        } else if (user instanceof AdminDTO) {
             System.out.println("\nWelcome Admin!");
             showAdminMenu(sc);
         }

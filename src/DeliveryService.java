@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public interface DeliveryService {
-    public User login(String u, String p);
+    public UserDTO login(String u, String p);
     public Customer registerCustomer(Scanner sc);
     
     public void viewMenu();
