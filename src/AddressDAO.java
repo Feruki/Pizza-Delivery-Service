@@ -1,4 +1,4 @@
 public interface AddressDAO {
-    void saveAddress(AddressDTO addr);
-    void updateAddress(CustomerDTO customer, AddressDTO addr);
+    public int saveAddress(AddressDTO addr);
+    public void updateAddress(CustomerDTO customer, AddressDTO addr);
 }

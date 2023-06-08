@@ -1,40 +1,51 @@
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Cart implements Serializable {
+public class Cart {
     // Attributes
-    private final List<ProductDTO> products;
+    private final Map<ProductDTO, Integer> products;
     private double total;
 
     // Constructor
     public Cart() {
-        products = new ArrayList<>();
+        products = new HashMap<>();
         total = 0.0;
     }
 
     // Adding a product to the Cart 
-    public boolean addProduct(ProductDTO p) {
-        if (p != null) {
-            products.add(p);
-            total += p.getPrice(); // Updating the total price
+    public boolean addProduct(ProductDTO p, int quant) {
+        if (p != null && quant > 0) {
+            int currentQuant = products.getOrDefault(p, 0);
+            products.put(p, currentQuant + quant);
+            total += p.getPrice() * quant; // Updating the total price
             return true;
         } else return false;
     }
 
     // Removing a product from the Cart
-    public boolean removeProduct(ProductDTO p) {
-        if (p != null && products.contains(p)) {
-            products.remove(p); 
-            total -= p.getPrice(); // Updating the total price again, subtracting the price of the removed product
-            return true;
-        } else return false;
+    public boolean removeProduct(ProductDTO p, int quant) {
+        if (p != null && quant > 0) {
+            if(products.containsKey(p)) {
+                int currentQuant = products.getOrDefault(p, 0);
+                if(currentQuant <= quant) {
+                    products.remove(p);
+                    total -= p.getPrice() * currentQuant; // Updating the total price again, if I want to remove more than currently in the cart, it removes everything and subtracts that amount time the price
+                } else {
+                    products.put(p, currentQuant - quant);
+                    total -= p.getPrice() * quant; // Updating the total price again, subtracting the price of the removed quantity products
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     // Listing all products in the Cart
     public void showProducts() {
-        for(ProductDTO p : products) {
-            System.out.println(p);
+        for(Map.Entry<ProductDTO, Integer> entry : products.entrySet()) {
+            ProductDTO p = entry.getKey();
+            int quant = entry.getValue();
+            System.out.println(quant + "x - " + p);
         }
         System.out.println();
     }
@@ -51,8 +62,8 @@ public class Cart implements Serializable {
     public double getTotal() {
         return total;
     }
-
-    public List<ProductDTO> getProducts() {
+    
+    public Map<ProductDTO, Integer> getProducts() {
         return products;
     }
 }

@@ -2,12 +2,18 @@ import java.util.Scanner;
 
 public class PizzaConsole {
     // Attributes
+    private static PizzaConsole uniqueGUI = null;
     private DeliveryService api;
     private int choice;
 
     // Constructor
-    public PizzaConsole(DeliveryService api) {
+    private PizzaConsole(DeliveryService api) {
         this.api = api;
+    }
+
+    public static PizzaConsole guiInstance(DeliveryService api) {
+        if(uniqueGUI == null) uniqueGUI = new PizzaConsole(api);
+        return uniqueGUI;
     }
 
     // Starting screen
@@ -41,7 +47,6 @@ public class PizzaConsole {
                     break;
                 case 3:
                     System.out.println("Goodbye!");
-                    api.save();
                     sc.close();
                     return;
                 default:
@@ -68,8 +73,8 @@ public class PizzaConsole {
         }
         
         // Checking if it's a customer or an admin to print the respective menu
-        if (user instanceof Customer) {
-            Customer customer = (Customer) user;
+        if (user instanceof CustomerDTO) {
+            CustomerDTO customer = (CustomerDTO) user;
             System.out.println("\nWelcome " + customer.getName() + "!");
             showCustomerMenu(sc, customer);
         } else if (user instanceof AdminDTO) {
@@ -80,7 +85,7 @@ public class PizzaConsole {
 
     // Register screen
     private void register(Scanner sc) {
-        Customer customer = api.registerCustomer(sc);
+        CustomerDTO customer = api.registerCustomer(sc);
 
         if(customer != null) {
             System.out.println("Registration successful!");
@@ -91,7 +96,7 @@ public class PizzaConsole {
     }
 
     // Customer menu
-    private void showCustomerMenu(Scanner sc, Customer customer) {
+    private void showCustomerMenu(Scanner sc, CustomerDTO customer) {
         while (true) {
             System.out.println("\nWhat would you like to do?");
             System.out.println("1. View menu");
@@ -100,8 +105,9 @@ public class PizzaConsole {
             System.out.println("4. View cart");
             System.out.println("5. Place order");
             System.out.println("6. View order history");
-            System.out.println("7. Change Address");
-            System.out.println("8. Log out");
+            System.out.println("7. View specific order");
+            System.out.println("8. Change Address");
+            System.out.println("9. Log out");
 
             try {
                 choice = sc.nextInt();
@@ -133,9 +139,12 @@ public class PizzaConsole {
                     api.viewOrderHistory(customer);
                     break;
                 case 7:
-                    api.changeCustomerAddress(sc, customer);
+                    api.viewSpecificOrder(sc, customer);
                     break;
                 case 8:
+                    api.changeCustomerAddress(sc, customer);
+                    break;
+                case 9:
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -150,9 +159,11 @@ public class PizzaConsole {
             System.out.println("1. View menu");
             System.out.println("2. Add item to menu");
             System.out.println("3. Remove item from menu");
-            System.out.println("4. View orders");
-            System.out.println("5. View customers");
-            System.out.println("6. Log out");
+            System.out.println("4. Update product price");
+            System.out.println("5. View orders");
+            System.out.println("6. View specific order");
+            System.out.println("7. View customers");
+            System.out.println("8. Log out");
     
             try {
                 choice = sc.nextInt();
@@ -175,12 +186,18 @@ public class PizzaConsole {
                     api.removeItemFromMenu(sc);
                     break;
                 case 4:
-                    api.viewOrders();
+                    api.updateProductPrice(sc);
                     break;
                 case 5:
-                    api.viewCustomers();
+                    api.viewOrders();
                     break;
                 case 6:
+                    api.viewSpecificOrder(sc);
+                    break;
+                case 7:
+                    api.viewCustomers();
+                    break;
+                case 8:
                     System.out.println("Logging out...");
                     return;
                 default:

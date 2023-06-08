@@ -1,52 +1,46 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class DeliveryServiceImpl implements DeliveryService, Serializable {
-    private List<Customer> customers;
-    private List<Order> orders;
-    private List<ProductDTO> menu;
-    private AdminDTO admin;
+public class DeliveryServiceImpl implements DeliveryService {
+    // Attributes
+    private AddressDAOImpl addrDAO;
+    private AdminDAOImpl admDAO;
+    private CustomerDAOImpl cusDAO;
+    private ProductDAOImpl prdDAO;
 
-    public DeliveryServiceImpl(AdminDTO a) {
-        this.admin = a;
-        customers = new ArrayList<Customer>();
-        orders = new ArrayList<Order>();
-        load();
+    // Constructor
+    public DeliveryServiceImpl(AddressDAOImpl aDAO, AdminDAOImpl adminDAO, CustomerDAOImpl cDAO, ProductDAOImpl pDAO) {
+        this.addrDAO = aDAO;
+        this.admDAO = adminDAO;
+        this.cusDAO = cDAO;
+        this.prdDAO = pDAO;
     }
 
+    // Login method
     @Override
     public UserDTO login(String u, String p) {
-        if(admin.login(u, p)) return admin;
-
-        for(Customer c : customers) {
-            if(c.login(u, p)) return c;
-        }
-
+        if(admDAO.login(u, p)) return new AdminDTO();
+        else if(cusDAO.login(u, p)) return cusDAO.getCustomerByUsername(u);
         return null;
     }
 
+    // Register method
     @Override
-    public Customer registerCustomer(Scanner sc) {
+    public CustomerDTO registerCustomer(Scanner sc) {
         System.out.println("\nPlease enter your user name:");
-        String username = sc.nextLine();
+            String username = sc.nextLine();
         System.out.println("Please enter your password:");
-        String password = sc.nextLine();
+            String password = sc.nextLine();
         
         System.out.println("\nPlease enter your name:");
-        String name = sc.nextLine();
+            String name = sc.nextLine();
         System.out.println("Please enter your surname:");
-        String surname = sc.nextLine();
+            String surname = sc.nextLine();
 
 
         System.out.println("\nPlease enter your address:");
         System.out.println("City:");
-        String city = sc.nextLine();
+            String city = sc.nextLine();
         System.out.println("Zipcode:");
         int zipcode = 0;
         try {
@@ -55,9 +49,10 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
             System.out.println("Wrong Input! Please try again.");
             registerCustomer(sc);
         }
+        // To eat up the entered line break
         sc.nextLine();
         System.out.println("Street:");
-        String street = sc.nextLine();
+            String street = sc.nextLine();
         System.out.println("Streetnumber:");
         int number = 0;
         try {
@@ -69,22 +64,34 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
         // To eat up the entered line break
         sc.nextLine();
 
-        Customer c = new Customer(name, surname, username, password, new AddressDTO(city, street, zipcode, number));
-        customers.add(c); // Adding the customer to the total customer list
+        // Transforming the street to a standardized String in order to reduce duplicates
+        street = street.toLowerCase();
+        street = street.replace("strasse", "str.");
+        street = street.replace("str.", "Str.");
+        street = street.substring(0, 1).toUpperCase() + street.substring(1);
 
+        // Transforming the city to a standardized String in order tor reduced duplicates
+        city = city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase();
+
+
+        CustomerDTO c = new CustomerDTO(name, surname, username, password, new AddressDTO(city, street, zipcode, number));
+        c.setId(cusDAO.saveCustomer(c, addrDAO));
+
+        if(c.getId() == -1) return null;
         return c;
     }
 
+    // Printing the menu
     @Override
     public void viewMenu() {
-        int n = 1;
+        List<ProductDTO> menu = prdDAO.getMenu();
         // Calculating the length of the longest product number (For example with 50 products longestNumber would be 2)
         int longestNumber = (int) Math.log10(menu.size()) + 1;
         System.out.println("----------------Pizza----------------\n");
         for(ProductDTO p : menu) {
             if(p.getType().toLowerCase().equals("pizza"))
                 // %s = String; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
-                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
+                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", p.getId(), p.getName(), p.getPrice());
         }
         System.out.println("\n");
 
@@ -92,14 +99,39 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
         for(ProductDTO p : menu) {
             if(p.getType().toLowerCase().equals("pasta"))
                 // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
-                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", n++, p.getName(), p.getPrice());
+                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", p.getId(), p.getName(), p.getPrice());
+        }
+        System.out.println("\n");
+
+        System.out.println("----------------Salad----------------\n");
+        for(ProductDTO p : menu) {
+            if(p.getType().toLowerCase().equals("salad"))
+                // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
+                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", p.getId(), p.getName(), p.getPrice());
+        }
+        System.out.println("\n");
+
+        System.out.println("---------------Dessert---------------\n");
+        for(ProductDTO p : menu) {
+            if(p.getType().toLowerCase().equals("dessert"))
+                // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
+                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", p.getId(), p.getName(), p.getPrice());
+        }
+        System.out.println("\n");
+
+        System.out.println("----------------Drinks---------------\n");
+        for(ProductDTO p : menu) {
+            if(p.getType().toLowerCase().equals("drinks"))
+                // %s = string; %[num]s = Width of the string; %-[num]s = left centered & same spacing between product name and price
+                System.out.printf("%" + longestNumber + "s. %-24s %7s$\n", p.getId(), p.getName(), p.getPrice());
         }
         System.out.println("\n");
     }
 
     @Override
-    public void addItemToCart(Scanner sc, Customer customer) {
+    public void addItemToCart(Scanner sc, CustomerDTO customer) {
         int pick = 0;
+        int quant = 1;
         System.out.println("\nEnter the number of the dish you would like to add:");
         try {
             pick = sc.nextInt();
@@ -107,12 +139,23 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
             System.out.println("Wrong Input! Please try again.");
             registerCustomer(sc);
         }
-        customer.addToCart(menu.get(pick-1)); // Because of indeces we have to subtract 1, if the customer wants the 10th item it'll be the index 9
+        // To eat up the entered line break
+        sc.nextLine();
+        System.out.println("Please enter the desired quantity:");
+        try {
+            quant = sc.nextInt();
+        } catch (Exception e) {
+            quant = 1;
+        }
+        // To eat up the entered line break
+        sc.nextLine();
+        cusDAO.addToCart(prdDAO.getProductById(pick), quant, customer);
     }
 
     @Override
-    public void removeItemFromCart(Scanner sc, Customer customer) {
+    public void removeItemFromCart(Scanner sc, CustomerDTO customer) {
         int pick = 0;
+        int quant = 1;
         System.out.println("\nEnter the number of the dish you would like to remove:");
         try {
             pick = sc.nextInt();
@@ -120,100 +163,159 @@ public class DeliveryServiceImpl implements DeliveryService, Serializable {
             System.out.println("Wrong Input! Please try again.");
             registerCustomer(sc);
         }
-        customer.removeFromCart(menu.get(pick-1)); // Because of indeces we have to subtract 1, if the customer wants the 10th item it'll be the index 9
+        System.out.println("Please enter the desired quantity:");
+        try {
+            quant = sc.nextInt();
+        } catch (Exception e) {
+            quant = 1;
+        }
+        cusDAO.removeFromCart(prdDAO.getProductById(pick), quant, customer);
     }
 
     @Override
-    public void viewCart(Customer customer) {
+    public void viewCart(CustomerDTO customer) {
         System.out.println("\nYour shopping cart:");
         customer.showCart();
         System.out.printf("Total: %.2f$\n", customer.showTotal());
     }
 
     @Override
-    public void placeOrder(Customer customer) {
-        orders.add(customer.placeOrder());
+    public void placeOrder(CustomerDTO customer) {
+        cusDAO.placeOrder(customer);
     }
 
     @Override
-    public void viewOrderHistory(Customer customer) {
+    public void viewOrderHistory(CustomerDTO customer) {
         System.out.println();
-        customer.showOrders();
+        cusDAO.showOrders(customer);
     }
 
     @Override
-    public void changeCustomerAddress(Scanner sc, Customer customer) {
-        customer.changeAddress(sc);
+    public void viewSpecificOrder(Scanner sc, CustomerDTO customer) {
+        int pick = 0;
+        System.out.println("\nEnter the number of the order you would like to see:");
+        try {
+            pick = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            viewSpecificOrder(sc, customer);
+        }
+        cusDAO.showSpecificOrder(customer, pick);
+    }
+
+    @Override
+    public void changeCustomerAddress(Scanner sc, CustomerDTO customer) {
+        System.out.println("\nPlease enter the new address:");
+        System.out.println("City:");
+            String city = sc.nextLine();
+        System.out.println("Zipcode:");
+            int zipcode = 0;
+        try {
+            zipcode = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            changeCustomerAddress(sc, customer);
+        }
+        sc.nextLine();
+        System.out.println("Street:");
+            String street = sc.nextLine();
+        System.out.println("Streetnumber:");
+            int number = 0;
+        try {
+            number = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            changeCustomerAddress(sc, customer);
+        }
+        addrDAO.updateAddress(customer, new AddressDTO(city, street, zipcode, number));
     }
 
     @Override
     public void addItemToMenu(Scanner sc) {
-        admin.addProduct(sc, menu);
+        System.out.println("Enter the name of the new dish you would like to add:");
+            String name = sc.nextLine();
+        System.out.println("How much should the new dish cost?");
+            Double price = 0.0;
+        try {
+            price = sc.nextDouble();
+        } catch(Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            addItemToMenu(sc);
+        }
+        // To eat up the entered line break
+        sc.nextLine();
+        System.out.println("Enter the Product Type (Pizza, Pasta, Salad, Dessert, Drinks):");
+        String type = sc.nextLine().toLowerCase();
+        if(!type.equalsIgnoreCase("Pizza") && !type.equalsIgnoreCase("Pasta") && !type.equalsIgnoreCase("Salad") && !type.equalsIgnoreCase("Dessert") && !type.equalsIgnoreCase("Drinks")) {
+            System.out.println("Wrong Input! Please try again.");
+            addItemToMenu(sc);
+        }
+
+        type = type.substring(0, 1).toUpperCase() + type.substring(1);
+
+        admDAO.addProduct(new ProductDTO(name, price, type));
     }
 
     @Override
     public void removeItemFromMenu(Scanner sc) {
-        admin.removeProduct(sc, menu);
+        System.out.println("\nEnter the number of the dish you would like to remove:");
+        int pick = 0;
+        try {
+            pick = sc.nextInt();
+        } catch(Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            removeItemFromMenu(sc);
+        }
+        // To eat up the entered line break
+        sc.nextLine();
+
+        admDAO.removeProduct(pick);
+    }
+
+    @Override
+    public void updateProductPrice(Scanner sc) {
+        int pick = 0;
+        double price = 0.0;
+        System.out.println("\nEnter the number of the dish you would like to update the price of:");
+        try {
+            pick = sc.nextInt();
+        } catch(Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            updateProductPrice(sc);
+        }
+        System.out.println("Enter the new price of the product:");
+        try {
+            price = sc.nextDouble();
+        } catch(Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            updateProductPrice(sc);
+        }
+
+        admDAO.updatePrice(pick, price);
     }
 
     @Override
     public void viewOrders() {
         System.out.println();
-        for(Order o : orders) {
-            System.out.println(o + " made by Customer #" + o.getCustomer().getId() + " - " + o.getCustomer().getFullName());
+        admDAO.viewOrders();
+    }
+
+    @Override
+    public void viewSpecificOrder(Scanner sc) {
+        int pick = 0;
+        System.out.println("\nEnter the number of the order you would like to see:");
+        try {
+            pick = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println("Wrong Input! Please try again.");
+            viewSpecificOrder(sc);
         }
+        admDAO.showSpecificOrder(pick);
     }
 
     @Override
     public void viewCustomers() {
         System.out.println();
-        for(Customer c : customers) {
-            System.out.println(c);
-        } 
-    }
-
-    @Override
-    public void save() {
-        // Saving customers
-        try (FileOutputStream fileOut = new FileOutputStream("./ser/customer.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
-            objectOut.writeObject(customers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Saving orders
-        try (FileOutputStream fileOut = new FileOutputStream("./ser/orders.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
-            objectOut.writeObject(orders);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Saving the menu
-        try (FileOutputStream fileOut = new FileOutputStream("./ser/menu.ser"); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
-            objectOut.writeObject(menu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }        
-    }
-
-    @Override
-    @SuppressWarnings("unchecked") // Just makes it so the IDE doesn't show the warnings anymore
-    public void load() {
-        // Loading customers
-        try (FileInputStream fileIn = new FileInputStream("./ser/customer.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-            customers = (ArrayList<Customer>) objectIn.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Loading orders
-        try (FileInputStream fileIn = new FileInputStream("./ser/orders.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-            orders = (ArrayList<Order>) objectIn.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Loading the menu
-        try (FileInputStream fileIn = new FileInputStream("./ser/menu.ser"); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-            menu = (ArrayList<ProductDTO>) objectIn.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        admDAO.viewCustomers();
     }
 }
