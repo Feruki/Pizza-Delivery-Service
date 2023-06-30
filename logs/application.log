@@ -1,0 +1,2 @@
+2023-06-30 15:42:37.970 [main] INFO  SingleLogger - Successfully added the Address 10
+2023-06-30 15:42:37.997 [main] ERROR SingleLogger - Username already exists

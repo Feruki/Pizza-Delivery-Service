@@ -18,16 +18,20 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
         int cID = -1;
         int aID = aDAO.saveAddress(c.getAddress());
         try {
+            // Check if the username already exists in the database
             PreparedStatement checkStatement = connection.prepareStatement("SELECT customerID FROM customers WHERE username = ?");
             checkStatement.setString(1, c.getUsername());
 
             ResultSet checkResult = checkStatement.executeQuery();
 
+            // Username already exists
             if(checkResult.next()) {
                 System.out.println("Username already exists!");
+                SingleLogger.getLogger().error("Username already exists", c.getUsername());
                 return -1;
             }
 
+            // Username doesn't exist, so adding a new one.
             PreparedStatement pStatement = connection.prepareStatement("INSERT INTO customers (name, surname, username, pw_hash, address_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setString(1, c.getName());
             pStatement.setString(2, c.getSurname());
@@ -40,8 +44,9 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
             if(genKeys.next()) {
                 cID = genKeys.getInt(1);
             }
+            SingleLogger.getLogger().info("Customer {} successfully registered.", cID);
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return cID;
     }
@@ -79,7 +84,7 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 }
             }
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return c;
     }
@@ -117,7 +122,7 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 }
             }
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return c;
     }
@@ -133,7 +138,7 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 if(u.equals(u) && BCrypt.checkpw(p, result.getString("pw_hash"))) return true;
             }
         } catch (SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return false;
     }
@@ -204,10 +209,12 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 oStatement.executeUpdate();
             }
 
+            SingleLogger.getLogger().info("Order {} successfully placed.", orderID);
+
             // Clear cart after placing the order
             c.getCart().clearCart();
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 
@@ -227,7 +234,7 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 System.out.println("Order #" + oID + " - Total Cost: " + totalCost);
             }
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
     
@@ -271,7 +278,7 @@ public class CustomerDAOImpl implements CustomerDAO, UserDAO {
                 return;
             }
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 }

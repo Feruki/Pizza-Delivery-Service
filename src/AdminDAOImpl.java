@@ -21,7 +21,7 @@ public class AdminDAOImpl implements AdminDAO, UserDAO {
                 if(u.equals("admin") && BCrypt.checkpw(p, result.getString("pw_hash"))) return true;
             }
         } catch (SQLException SQLe) {
-            SQLe.printStackTrace();  
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return false;
     }
@@ -36,7 +36,7 @@ public class AdminDAOImpl implements AdminDAO, UserDAO {
             pStatement.setString(3, prod.getType());
             pStatement.executeUpdate();
         } catch (SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 
@@ -48,7 +48,7 @@ public class AdminDAOImpl implements AdminDAO, UserDAO {
             pStatement.setInt(1, pID);
             pStatement.executeUpdate();
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 
@@ -61,7 +61,7 @@ public class AdminDAOImpl implements AdminDAO, UserDAO {
             pStatement.setInt(2, pID);
             pStatement.executeUpdate();
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 
@@ -123,7 +123,7 @@ public class AdminDAOImpl implements AdminDAO, UserDAO {
                 return;
             }
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
     

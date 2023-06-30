@@ -23,7 +23,12 @@ public class AddressDAOImpl implements AddressDAO {
 
             ResultSet checkResult = checkStatement.executeQuery();
             
-            if(checkResult.next()) aID = checkResult.getInt(1);
+            // Address already exists
+            if(checkResult.next()) {
+                aID = checkResult.getInt(1);
+                SingleLogger.getLogger().warn("Address already exists. ID {} returned", aID);
+            }
+            // Address doesn't exist, so adding a new one
             else {
                 PreparedStatement pStatement = connection.prepareStatement("INSERT INTO addresses (city, street, zipcode, house_number) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 pStatement.setString(1, addr.getCity());
@@ -36,9 +41,10 @@ public class AddressDAOImpl implements AddressDAO {
                 if(genKeys.next()) {
                     aID = genKeys.getInt(1);
                 }
+                SingleLogger.getLogger().info("Successfully added the Address {}", aID);
             }
         } catch (SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return aID;
     }
@@ -54,8 +60,9 @@ public class AddressDAOImpl implements AddressDAO {
             pStatement.setInt(4, addr.getNumber());
             pStatement.setInt(5, customer.getId());
             pStatement.executeUpdate();
+            SingleLogger.getLogger().info("Address successfully updated");
         } catch (SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
     }
 }

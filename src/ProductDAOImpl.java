@@ -30,7 +30,7 @@ public class ProductDAOImpl implements ProductDAO {
                 menu.add(prod);
             } 
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return menu;
     }
@@ -54,7 +54,7 @@ public class ProductDAOImpl implements ProductDAO {
                 p.setId(id);
             }  
         } catch(SQLException SQLe) {
-            SQLe.printStackTrace();
+            SingleLogger.getLogger().error("Error in the database query", SQLe);
         }
         return p;
     }
